@@ -5,23 +5,25 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import { generatePagination } from '@/app/lib/utils';
 import { usePathname, useSearchParams } from 'next/navigation';
+import path from 'path';
 
 export default function Pagination({ totalPages }: { totalPages: number }) {
   // NOTE: comment in this code when you get to this point in the course
 
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get('page') || 1);
 
   const allPages = generatePagination(currentPage, totalPages);
 
-  const createPageURL = (page: string | number) => {
+  const createPageURL = (page: string | number, pathname: string) => {
     const params = new URLSearchParams(searchParams.toString());
     if (page === 1) {
       params.delete('page');
     } else {
       params.set('page', page.toString());
     }
-    return `${usePathname()}?${params.toString()}`;
+    return `${pathname}?${params.toString()}`;
   };
 
   return (
@@ -31,7 +33,7 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
       <div className="inline-flex">
         <PaginationArrow
           direction="left"
-          href={createPageURL(currentPage - 1)}
+          href={createPageURL(currentPage - 1, pathname)}
           isDisabled={currentPage <= 1}
         />
 
@@ -47,7 +49,7 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
             return (
               <PaginationNumber
                 key={page}
-                href={createPageURL(page)}
+                href={createPageURL(page, pathname)}
                 page={page}
                 position={position}
                 isActive={currentPage === page}
@@ -58,7 +60,7 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
 
         <PaginationArrow
           direction="right"
-          href={createPageURL(currentPage + 1)}
+          href={createPageURL(currentPage + 1, pathname)}
           isDisabled={currentPage >= totalPages}
         />
       </div>

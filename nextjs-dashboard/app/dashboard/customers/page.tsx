@@ -1,4 +1,13 @@
-export default function CustomersPage() {
+import React, { Suspense } from 'react';
+import Table from '@/app/ui/customers/table';
+import { fetchFilteredCustomers } from '@/app/lib/data';
+import { TableRowSkeleton } from '@/app/ui/skeletons';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+       title: 'Customers',
+};
+
 export default async function CustomersPage({
        searchParams,
 }: {
